@@ -1,3 +1,5 @@
+<!-- Author: Andreas Hadjiprocopis (andreashad2@gmail.com) -->
+
 <project name="ahp.org.Clusterator" default="dist" basedir=".">
 	<description>
 		build file for ahp.org.Clusterator
@@ -14,6 +16,23 @@
 	<property name="dist" location="../dist"/>
 	<property name="jarPath" value="${dist}/lib"/>
 	<property name="jarName" value="${projectName}.jar"/>
+
+        <target name="git-push" depends="init">
+                <exec executable="git">
+                        <arg value="add"/>
+                        <arg value="*"/>
+                </exec>
+                <exec executable="git">
+                        <arg value="commit"/>
+                        <arg value="-am"/>
+                        <arg value="commit: ${MYTIMESTAMP}"/>
+                </exec>
+                <exec executable="git">
+                        <arg value="push"/>
+                        <arg value="git@github.com:hadjiprocopis/clusterator.git"/>
+                        <arg value="--all"/>
+                </exec>
+        </target>
 
 	<path id='compile.classpath'>
 		<fileset dir='/usr/local/apache-commons/lib'>
@@ -58,7 +77,7 @@
 	<target name="init">
 		<!-- Create the time stamp -->
 		<tstamp>
-			<format property="FUCKYOUTIMESTAMP"
+			<format property="MYTIMESTAMP"
 			pattern="dd_MM_yyyy.HH_mm"/>
 		</tstamp>
 		<!-- Create the build directory structure used by compile -->
@@ -103,7 +122,7 @@
 	<target name="backup" depends="init"
 		description="make a backup"
 	>
-		<tar destfile="${backup}/${FUCKYOUTIMESTAMP}.tgz"
+		<tar destfile="${backup}/${MYTIMESTAMP}.tgz"
 			compression="gzip"
 		>
 			<tarfileset dir="${test}" preserveLeadingSlashes="true" casesensitive="yes">
